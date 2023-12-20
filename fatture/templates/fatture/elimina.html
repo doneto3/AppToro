@@ -1,0 +1,34 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+    <button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+    <section>
+    <h2>Sei sicuro di voler erliminare la seguente fattura?</h2>
+    <table id="tabella-fatture" style="margin-top: 30px;">
+    <thead>
+        <tr>
+            <th>Numero</th>
+            <th>Data</th>
+            <th>Importo</th>
+            <th>Tipo</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>{{ fattura.numero }}</td>
+                <td>{{ fattura.data }}</td>
+                <td>{{ fattura.importo }}</td>
+                <td>{{ fattura.get_tipo_display }}
+                {% if fattura.tipo == 'C' %}
+                    - {{ fattura.cliente.nome }}
+                {% endif %}
+                </td>
+            </tr>
+    </tbody>
+</table>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+    <button style="background-color: #ba2121" onclick="location.href = '{% url 'elimina' fattura.numero %}'" id="elimina">Elimina</button>
+    </form>
+    </section>
+{% endblock %}

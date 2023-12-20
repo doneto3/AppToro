@@ -1,0 +1,18 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+<body>
+
+<section>
+    <h2>Tipo</h2>
+    <h3>Scegli che tipo di fattura devi inserire</h3>
+    <div id="sceltaTipo">
+        <button onclick="location.href = '{% url 'burocrazia' %}'">Burocrazia</button>
+        <button onclick="location.href = '{% url 'tassa' %}'">Tasse</button>
+        <button onclick="location.href = '{% url 'clienti' %}'">Clienti</button>
+        <button onclick="location.href = '{% url 'uscita' %}'">Spese</button>
+    </div>
+</section>
+
+
+</body>
+{% endblock %}

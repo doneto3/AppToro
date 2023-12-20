@@ -1,0 +1,16 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+
+    <body>
+    <button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+    <section>
+    <h2>Tipo</h2>
+    <h3>Scegli il tipo di viaggio</h3>
+    <div id="sceltaTipo">
+        <button onclick="location.href = '{% url 'viaggi' 1 %}'">Inalca</button>
+        <button onclick="location.href = '{% url 'viaggi' 2 %}'">Privati</button>
+    </div>
+</section>
+    </body>
+
+{% endblock %}

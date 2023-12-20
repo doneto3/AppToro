@@ -1,0 +1,17 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+
+    <body>
+    <button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+        <section>
+            <h2>Crea Fattura Burocratica</h2>
+        <form id="fattura-form" method="post" action="{% url 'burocrazia' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Aggiungi Fattura</button>
+        </form>
+        </section>
+    </body>
+
+{% endblock %}

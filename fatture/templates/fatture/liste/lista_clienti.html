@@ -1,0 +1,96 @@
+<table class="tabella-clienti" id="tabella-fatture" style="margin-top: 30px;">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clienti %}
+            <tr name="visibile">
+                <td>{{ cliente.nome }}</td>
+                <td>
+                        <button id="mostra-form-viaggio-{{ cliente.id }}">+</button>
+                        <button name="{{ cliente.nome }}" id="mostra-table-{{ cliente.id }}">⯆</button>
+                </td>
+            </tr>
+
+            <tr name="clienti" >
+
+                <td colspan="2" style="border: 0">
+                    <div id="cliente{{ cliente.id }}" style="display: none; border: 1px solid lightgrey;">
+                {% include 'fatture/liste/lista_viaggi.html' %}
+                        {% include 'fatture/formFatture.html' %}
+             </div>
+                    <div id="viaggio{{ cliente.id }}" style="display: none; width: 100%; background-color: #f1f1f1; padding: 10px; border: 1px solid #d4d4d4;">
+                        <form id="viaggio-form" method="post">
+                            {% csrf_token %}
+                            <label>Data viaggio</label>
+                            {{ formV.data_viaggio }}
+                            <label>Ddt:</label>
+                            {{ formV.ddt }}
+                            <label>Prezzo viaggio:</label>
+                            {{ formV.prezzo_viaggio }}
+                            <label>Distanza km:</label>
+                            {{ formV.distanza_km }}
+                            <label>Mittente:</label>
+                            {{ formV.mittente }}
+                            <script>
+                                $("#id_mittente").attr("id", "mittente{{ cliente.id }}");
+                                $("#mittente{{ cliente.id }}").addClass("mittente{{ cliente.id }}")
+                            </script>
+                            <p></p>
+                            <div style="display: none">
+                                {{ formV.cliente }}
+                                <script>
+                                $("#id_cliente").attr("id", "cliente{{ cliente.id }}");
+                                $('#cliente{{ cliente.id }} option').filter(function(i, e) { return $(e).text() == "{{cliente.nome}}"}).prop('selected', true)
+                            </script>
+                            </div>
+                            <button type="submit" name="Aggiungi_Viaggio">Aggiungi Viaggio</button>
+                        </form>
+                    </div>
+            </td>
+
+            </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function () {
+    {% for cliente in clienti %}
+        $('#mittente{{ cliente.id }}').select2({ width: '100%' });
+        $('#mostra-table-{{ cliente.id }}').click(function () {
+            if ($('#cliente{{cliente.id}}').is(':visible')) {
+                $('#cliente{{cliente.id}}').slideUp();
+                $('#mostra-table-{{ cliente.id }}').html("⯆");
+            } else {
+                $('#cliente{{cliente.id}}').slideDown();
+                if ($('#viaggio{{cliente.id}}').is(':visible')) {
+                    $('#viaggio{{cliente.id}}').slideUp();
+                    $('#mostra-form-viaggio-{{ cliente.id }}').html("+");
+                }
+                $('#mostra-table-{{ cliente.id }}').html("⯅");
+            }
+        });
+        $('#mostra-form-viaggio-{{ cliente.id }}').click(function () {
+            if ($('#viaggio{{cliente.id}}').is(':visible')) {
+                $('#viaggio{{cliente.id}}').slideUp();
+                $('#mostra-form-viaggio-{{ cliente.id }}').html("+");
+            } else {
+                $('#viaggio{{cliente.id}}').slideDown();
+                if ($('#cliente{{cliente.id}}').is(':visible')) {
+                $('#cliente{{cliente.id}}').slideUp();
+                $('#mostra-table-{{ cliente.id }}').html("⯆");
+            }
+                $('#mostra-form-viaggio-{{ cliente.id }}').html("−");
+            }
+        });
+
+    {% endfor %}
+});
+</script>

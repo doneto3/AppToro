@@ -1,0 +1,68 @@
+<form method="post" action="{% url 'entrata' cliente.id%}">
+                {% csrf_token %}
+    <p>
+                <label>Numero</label>
+                {{ formF.numero }}
+                <label>Data</label>
+                {{ formF.data }}
+
+                <div style="display: none">
+                {{ formF.importo }}
+
+                {{ formF.cliente }}
+                    <script>
+                $("#id_cliente").attr("id", "clienteF{{ cliente.id }}");
+                </script>
+                {{ formF.tipo }}
+                {{ formF.viaggi }}
+                    </div>
+                <br>
+                <button type="submit" name="Aggiungi_Fattura">Genera Fattura</button>
+                <span style="margin-left: 600px; font-weight: bold; color: #28a745; font-size: 34px;">Importo: <span id="importoVisualizzato"></span>€</span>
+                    <script>
+
+                $("#id_viaggi option:contains('{{ cliente.nome }} -')").prop('selected', true);
+                var importo_finale = 0;
+                $.each($("#id_viaggi option:contains('{{ cliente.nome }} -')").text().split("€"),function(i,e){
+
+                    $.each(e.split("-"),function(i,e){
+                        if(i == 4){
+                            importo_finale = importo_finale + parseInt(e);
+                            console.log(importo_finale)
+                        }
+                    });
+
+
+                });
+                $("#id_importo").val(importo_finale);
+                $("#id_importo").attr("id", "importoF{{ cliente.id }}");
+                $("#importoVisualizzato").text(importo_finale);
+                console.log(importo_finale+'ok');
+                $("#importoVisualizzato").attr("id", "importo{{ cliente.id }}");
+                console.log("----")
+                $("#id_viaggi").attr("id", "viaggiF{{ cliente.id }}");
+                function aggiornaPagato(viaggioId) {
+                    $.ajax({
+                        url: `/aggiornaPagato/${viaggioId}`,
+                        type: 'POST',
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Aggiorna il colore del pallino in base allo stato pagato
+                                var colore = response.pagato ? '#4CAF50' : '#FF0000';
+                                console.log(colore)
+                                $('#pallino-' + viaggioId).css('background-color', colore);
+                            }
+                        },
+                        error: function() {
+                            console.log('Errore nella richiesta Ajax');
+                        }
+                    });
+                }
+
+                    </script>
+</p>
+            </form>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Aziendale</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+#riepilogo-mensile {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#sceltaTipo {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#sceltaTipo > div {
+    width: calc(50% - 10px);
+    margin: 5px;
+}
+
+
+#riepilogo-mensile > div {
+    width: calc(33.33% - 10px);
+    margin: 5px;
+}
+
+#riepilogo-mensile h2 {
+    color: #007bff;
+}
+
+#riepilogo-mensile .valore {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#riepilogo-mensile .valore span {
+    display: block;
+    padding-left: 20px;
+}
+
+.fatturato {
+    color: #28a745;
+}
+
+.spese {
+    color: #dc3545;
+}
+
+.utile {
+    color: #007bff;
+}
+
+section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    min-width: 97%;
+}
+
+h2 {
+    color: #333;
+}
+
+button {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#invoice-list {
+    margin-top: 20px;
+}
+
+
+input[type="text"] {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    section {
+        padding: 10px;
+    }
+    button {
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+
+
+#tabella-fatture {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 30px;
+}
+
+#tabella-fatture th, #tabella-fatture td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#tabella-fatture th {
+    background-color: #f2f2f2;
+}
+
+#tabella-fatture tbody tr:hover {
+    background-color: #f5f5f5;
+}
+#tabella-fatture tbody tr[name="clienti"]:hover {
+    background-color: white;
+}
+#tabella-fatture tbody tr[name="clientif"]:hover {
+    background-color: white;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.step-links a {
+    display: inline-block;
+    padding: 8px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+.step-links .current {
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.step-links a:hover {
+    background-color: #f5f5f5;
+}
+
+.step-links span.current {
+    display: inline-block;
+    padding: 8px;
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+.step-links span.disabled {
+    display: inline-block;
+    padding: 8px;
+    color: #ddd;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+#banner {
+    max-width: 96%; /* Puoi regolare la larghezza massima in percentuale */
+    margin-left: auto; /* Posiziona l'elemento al centro rispetto al suo contenitore */
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#viaggio-form {
+    margin-bottom: 15px;
+}
+
+#viaggio-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+#viaggio-form input,
+#viaggio-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+#viaggio-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#viaggio-form button:hover {
+    background-color: #0056b3;
+}
+
+#cliente-form {
+    margin-bottom: 15px;
+}
+
+#cliente-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+#cliente-form input,
+#cliente-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+#cliente-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#cliente-form button:hover {
+    background-color: #0056b3;
+}
+
+#fattura-form {
+    margin-bottom: 15px;
+}
+
+#fattura-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+#fattura-form input,
+#fattura-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+#fattura-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#fattura-form button:hover {
+    background-color: #0056b3;
+}
+
+#chiudi-form {
+    background-color: #6c757d;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#chiudi-form:hover {
+    background-color: #5a6268;
+}
+.pallino-verde {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+     /* Colore verde */
+    border-radius: 50%; /* Rende il quadrato un cerchio */
+}
+.square-button {
+            width: 20px;
+            height: 20px;
+            background-color: #3498db;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Stile della spunta */
+        .square-button::after {
+            content: '\2713'; /* Codice carattere Unicode per la spunta */
+            font-size: 20px;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+        }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+</head>
+{% block corpo %}
+<body>
+    <section id="Recap">
+        <div id="riepilogo-mensile">
+            <h2>Riepilogo Mensile {{ mese }}</h2>
+            <div></div><div></div>
+            <div class="fatturato">
+                <span class="label">Fatturato:</span>
+                <span class="valore">
+                    <span id="valFatturato">{{ fatturato }}€</span>
+                </span>
+            </div>
+            <div class="spese">
+                <span class="label">Spese:</span>
+                <span class="valore">
+                    <span>{{ spesaTot }}€</span>
+                </span>
+            </div>
+            <div class="utile">
+                <span class="label">Utile Mensile:</span>
+                <span class="valore">
+                    <span>{{ utile }}€</span>
+                </span>
+            </div>
+            <div class="km_percorsi">
+                <span class="label">Km Percorsi:</span>
+                <span class="valore">
+                    <span>{{ km_percorsi }} km</span>
+                </span>
+            </div>
+            <div class="spesa_stimata">
+                <span class="label">Spesa Stimata:</span>
+                <span class="valore">
+                    <span>{{ spesaStimata }}€</span>
+                </span>
+            </div>
+            <div class="utile_stimato">
+                <span class="label">Utile Stimato:</span>
+                <span class="valore">
+                    <span>{{ utileStimato }}€</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <section id="Menu">
+        <h2>Menu</h2>
+        <button onclick="showSection('Burocrazia')">Burocrazia</button>
+        <button onclick="showSection('Tasse')">Tasse</button>
+        <button onclick="location.href = '{% url 'clienti' %}'">Clienti</button>
+        <button onclick="location.href = '{% url 'viaggi' %}'">Inalca</button>
+        <button onclick="showSection('Spese')">Spese</button>
+    </section>
+
+    <button onclick="showButton('Indietro')" id="indietro"  style="display: none;">Indietro</button>
+
+    <section id="Burocrazia" style="display: none;">
+        <h2>Sezione Burocrazia</h2>
+        <!-- Contenuto della sezione Burocrazia -->
+    </section>
+
+    <section id="Tasse" style="display: none;">
+        <h2>Sezione Tasse</h2>
+
+    </section>
+
+    <section id="Clienti" style="display: none;">
+        <h2>Sezione Clienti</h2>
+        <!-- Contenuto della sezione Clienti -->
+    </section>
+
+    <section id="Spese" style="display: none;">
+        <h2>Sezione Spese</h2>
+    {% include 'fatture/liste/lista_fatture.html' %}
+    </section>
+
+    <section id="invoice-list">
+        <h2>Fatture</h2>
+        <button onclick="location.href = {% url 'sceltaTipo' %}" id="mostra-form">Crea</button>
+        <input id="myInputf" type="text" placeholder="Cerca per numero di fattura" oninput="searchInvoice()">
+        <!-- Lista di fatture di esempio -->
+
+        <table class="tabella-fatture" id="tabella-fatture" style="margin-top: 30px;">
+    <thead>
+        <tr>
+            <th>Numero</th>
+            <th>Data</th>
+            <th>Importo</th>
+            <th>Tipo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fattura in fatture %}
+            <tr name="fatture">
+                <td>{{ fattura.numero }}</td>
+                <td>{{ fattura.data }}</td>
+                <td id="importo{{ fattura.id }}">{{ fattura.importo }}</td>
+                <td>{{ fattura.get_tipo_display }}
+                {% if fattura.tipo == 'C' %}
+                    - {{ fattura.cliente.nome }}
+                {% endif %}
+                </td>
+                <td><button onclick="location.href='{% url 'modifica' fattura.numero %}'">✏️</button>
+                <button onclick="location.href='{% url 'elimina' fattura.numero %}'">🗑️</button>
+                    {% if fattura.tipo == 'C' %}
+                <button name="{{ fattura.numero }}" id="mostra-table-{{ fattura.id }}">⯆</button></td>
+                    {% endif %}
+            </tr>
+            <tr name="clientif" >
+
+                <td  style="border: 0" colspan="5">
+                    <div id="cliente{{ fattura.id }}" style="display: none; border: 1px solid lightgrey;">
+                {% include 'fatture/liste/lista_viaggi.html' %}
+             </div>
+            </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    <script>
+    function searchInvoice() {
+        var input, filter, table, trv, trc, td, i, txtValue;
+        input = document.getElementById("myInputf");
+        filter = input.value.toUpperCase();
+        table = document.getElementsByClassName("tabella-fatture")[0]; // Seleziona il primo elemento della HTMLCollection
+        trv = table.querySelectorAll("tr[name='fatture']");
+        trc = table.querySelectorAll("tr[name='clientif']");
+
+        for (i = 0; i < trv.length; i++) {
+            td = trv[i].querySelectorAll("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    trv[i].style.display = "";
+                    trc[i].style.display = "";
+                } else {
+                    trv[i].style.display = "none";
+                    trc[i].style.display = "none";
+                }
+            }
+        }
+    }
+    {% for fattura in fatture %}
+    $('#mostra-table-{{ fattura.id }}').click(function () {
+            if ($('#cliente{{fattura.id}}').is(':visible')) {
+                $('#cliente{{fattura.id}}').slideUp();
+                $('#mostra-table-{{ fattura.id }}').html("⯆");
+            } else {
+                $('#cliente{{fattura.id}}').slideDown();
+                $('#mostra-table-{{ fattura.id }}').html("⯅");
+            }
+        });
+    {% endfor %}
+</script>
+
+
+    </section>
+
+    </body>
+{% endblock %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('#id_cliente').select2({ width: '100%' });
+        $('#id_mittente').select2({ width: '100%' });
+        // Mostra il form quando il bottone viene cliccato
+        $('#mostra-form').click(function () {
+            $('#banner').slideDown();
+        });
+
+        // Chiudi il form quando il bottone viene cliccato
+        $('#chiudi-form').click(function () {
+            $('#banner').slideUp();
+        });
+    });
+
+        function showButton() {
+            document.querySelector("#indietro").style.display = 'none';
+            document.getElementById(sezioneOld).style.display = 'none';
+            document.querySelector("#Recap").style.display = 'block';
+            document.querySelector("#Menu").style.display = 'block';
+            document.querySelector("#invoice-list").style.display = 'block';
+
+        }
+        function showSection(sectionId) {
+            // Nascondi tutte le sezioni
+            sezioneOld = sectionId;
+            var sections = document.querySelectorAll('section');
+            sections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+
+            // Mostra la sezione richiesta
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                document.querySelector("#indietro").style.display = 'block';
+                selectedSection.style.display = 'block';
+            }
+        }
+    </script>
+
+</html>

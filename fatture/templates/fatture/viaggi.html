@@ -1,0 +1,64 @@
+{% extends 'fatture/index.html' %}
+
+{% block corpo %}
+
+<body>
+    <button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+    <section>
+        <h2>Inalca</h2>
+        <button id="mostra-form">+</button>
+        <input id="myInputi" type="text" placeholder="Cerca per DDT" oninput="searchInvoiceI()">
+        {% for cliente in clienti %}
+        {% include 'fatture/liste/lista_viaggi.html' %}
+            {% include 'fatture/formFatture.html' %}
+        {% endfor %}
+    <script>
+    function searchInvoiceI() {
+        var input, filter, table, trv, td, i, txtValue;
+        input = document.getElementById("myInputi");
+        filter = input.value.toUpperCase();
+        table = document.getElementsByClassName("tabella-inalca")[0]; // Seleziona il primo elemento della HTMLCollection
+        trv = table.querySelectorAll("tr[name='inalca']");
+
+        for (i = 0; i < trv.length; i++) {
+            td = trv[i].querySelectorAll("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    trv[i].style.display = "";
+
+                } else {
+                    trv[i].style.display = "none";
+
+                }
+            }
+        }
+    }
+</script>
+    </section>
+
+    <div id="banner" style="overflow-y: scroll; display: none; position: fixed; top: 0; height: 75%; width: 100%; background-color: #f1f1f1; padding: 10px; border: 1px solid #d4d4d4;">
+        <form id="viaggio-form" method="post">
+            {% csrf_token %}
+            <p>
+            <label>Data viaggio</label>
+            {{ form.data_viaggio }}
+            <label>Ddt:</label>
+            {{ form.ddt }}
+            <label>Prezzo viaggio:</label>
+            {{ form.prezzo_viaggio }}
+            <label>Distanza km:</label>
+            {{ form.distanza_km }}
+            <label>Mittente:</label>
+            {{ form.mittente }}
+            <div style="display: none">
+                {{ form.cliente }}
+            </div>
+            </p>
+            <button type="submit" name="Aggiungi_Viaggio">Aggiungi Viaggio</button>
+        </form>
+        <button id="chiudi-form">Chiudi</button>
+    </div>
+</body>
+
+{% endblock %}

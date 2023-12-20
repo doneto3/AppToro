@@ -1,0 +1,52 @@
+{% extends 'fatture/index.html' %}
+
+{% block corpo %}
+<body>
+    <button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+    <section>
+        <h2>Viaggi per {{ cliente }}</h2>
+        <h3>Seleziona i viaggi che vuoi inserire nella fattura</h3>
+        <div id="banner">
+            <form id="fattura-form" method="post" action="{% url 'entrata' cliente.id%}">
+                {% csrf_token %}
+                <label>Numero</label>
+                {{ form.numero }}
+                <label>Data</label>
+                {{ form.data }}
+                <div>
+                {{ form.importo }}
+
+                {{ form.cliente }}
+
+                {{ form.tipo }}
+                {{ form.viaggi }}
+                </div>
+                <br>
+                <button type="submit">Inserisci</button>
+                <span style="margin-left: 600px; font-weight: bold; color: #28a745; font-size: 34px;">Importo: {{ importo }}€</span>
+            </form>
+        </div>
+        <table id="tabella-fatture" style="margin-top: 30px;">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>DDT</th>
+                    <th>Prezzo Viaggio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for viaggio in viaggi %}
+                <tr>
+                    <td>{{ viaggio.data_viaggio }}</td>
+                    <td>{{ viaggio.ddt }}</td>
+                    <td>{{ viaggio.prezzo_viaggio }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </section>
+
+</body>
+
+{% endblock %}

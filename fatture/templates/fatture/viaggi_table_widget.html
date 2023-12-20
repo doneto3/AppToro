@@ -1,0 +1,30 @@
+{% for group in widget.optgroups %}
+    <table>
+        <thead>
+            <tr>
+                <th></th> <!-- Colonna per la casella di controllo -->
+                <th>Distanza</th>
+                <th>Data</th>
+                <th>Prezzo</th>
+                <!-- Altre colonne se necessario -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for option in group %}
+                <tr>
+                    <td>
+                        <input type="{{ widget.input_type }}"
+                               name="{{ widget.name }}"
+                               value="{{ option.value }}"
+                               id="{{ widget.id_for_label }}_{{ option.value }}"
+                               {% if option.selected %}checked{% endif %}>
+                    </td>
+                    <td><label for="{{ widget.id_for_label }}_{{ option.value }}">{{ option.label.distanza }}</label></td>
+                    <td>{{ option.label.data }}</td>
+                    <td>{{ option.label.prezzo }}</td>
+                    <!-- Altre colonne se necessario -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endfor %}

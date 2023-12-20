@@ -1,0 +1,27 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+<body>
+    <button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+    <section>{% if clienti %}
+        <h2>Cliente</h2>
+        <h3>Scegli per quale cliente vuoi inserire la fattura</h3>
+        <table id="tabella-fatture" style="margin-top: 30px;">
+    <thead>
+        <tr>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clienti %}
+            <tr>
+                <td><a href="{% url 'entrata' cliente.id %}">{{ cliente.nome }}</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    {% else %}
+        <p align="center">Non ci sono clienti con viaggi non fatturati</p>
+    {% endif %}
+    </section>
+</body>
+{% endblock %}

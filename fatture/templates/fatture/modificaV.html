@@ -1,0 +1,42 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+<body>
+<button onclick="location.href = '{% url 'fatture' %}'" id="indietro">Indietro</button>
+<section>
+<div id="banner">
+<form id="fattura-form" method="post" action="">
+    {% csrf_token %}
+    <label for="numero">Numero:</label>
+    <input type="text" name="numero" value="{{ fattura.numero }}"><br>
+
+    <label for="data">Data:</label>
+    <input type="date" name="data" value="{{ fattura.data|date:"Y-m-d" }}"><br>
+
+    <button type="submit">Salva</button>
+    <span style="margin-left: 600px; font-weight: bold; color: #28a745; font-size: 34px;">Importo: {{ fattura.importo }}€</span>
+
+</form>
+</div>
+{% if fattura.tipo == 'C' %}
+    <table id="tabella-fatture" style="margin-top: 30px;">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Distanza</th>
+                    <th>Prezzo Viaggio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for viaggio in fattura.viaggi.all %}
+                <tr>
+                    <td>{{ viaggio.data_viaggio }}</td>
+                    <td>{{ viaggio.distanza_km }}</td>
+                    <td>{{ viaggio.prezzo_viaggio }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endif %}
+</section>
+</body>
+{% endblock %}

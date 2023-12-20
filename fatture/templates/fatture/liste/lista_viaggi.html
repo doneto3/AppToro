@@ -1,0 +1,141 @@
+<table class="tabella-inalca" id="tabella-fatture" style="margin-top: 30px;">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Distanza</th>
+            <th>DDT</th>
+            <th>Prezzo Viaggio</th>
+            <!--<th>Cliente</th>-->
+            <th>Mittente</th>
+            <th>Fatturato</th>
+            <th>Pagato</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for viaggio in viaggi %}
+            {% if viaggio.cliente.nome == cliente.nome %}
+
+
+            <tr  name="inalca{{ viaggio.id }}">
+                <td>{{ viaggio.data_viaggio }}</td>
+                <td>{{ viaggio.distanza_km }}</td>
+                <td>{{ viaggio.ddt }}</td>
+                <td>{{ viaggio.prezzo_viaggio }}</td>
+                <!--<td>{{ viaggio.cliente }}</td>-->
+                <td>{{ viaggio.mittente }}</td>
+                <td><span {% if viaggio.stato == 1 %}style="background-color: #4CAF50;"{% else %}style="background-color: #FF0000;"{% endif %} class="pallino-verde"></span></td>
+                <td>
+                    <span id="pallino-{{ viaggio.id }}" {% if viaggio.pagato == 1 %}style="background-color: #4CAF50;"{% else %}style="background-color: #FF0000;"{% endif %} class="pallino-verde"></span>
+
+                </td>
+                <td>
+                    <button onclick="aggiornaPagato({{ viaggio.id}})" class="square-button" id="myButton"></button>
+                    <button onclick="eliminaViaggio({{ viaggio.id}})">🗑️</button>
+                </td>
+
+            </tr>
+            {% endif %}
+        {% endfor %}
+    {% for viaggio in fattura.viaggi.all %}
+
+
+
+            <tr  name="inalca{{ viaggio.id }}">
+                <td>{{ viaggio.data_viaggio }}</td>
+                <td>{{ viaggio.distanza_km }}</td>
+                <td>{{ viaggio.ddt }}</td>
+                <td>{{ viaggio.prezzo_viaggio }}</td>
+                <!--<td>{{ viaggio.cliente }}</td>-->
+                <td>{{ viaggio.mittente }}</td>
+                <td><span {% if viaggio.stato == 1 %}style="background-color: #4CAF50;"{% else %}style="background-color: #FF0000;"{% endif %} class="pallino-verde"></span></td>
+                <td>
+                    <span id="pallino-{{ viaggio.id }}" {% if viaggio.pagato == 1 %}style="background-color: #4CAF50;"{% else %}style="background-color: #FF0000;"{% endif %} class="pallino-verde"></span>
+
+                </td>
+                <td>
+                    <button onclick="aggiornaPagato({{ viaggio.id}})" class="square-button" id="myButton"></button>
+                    <button onclick="eliminaViaggio({{ viaggio.id}})">🗑️</button>
+                </td>
+
+            </tr>
+        {% endfor %}
+</tbody>
+</table>
+<script>
+                function aggiornaPagato(viaggioId) {
+                    $.ajax({
+                        url: `/aggiornaPagato/${viaggioId}`,
+                        type: 'POST',
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Aggiorna il colore del pallino in base allo stato pagato
+                                var colore = response.pagato ? '#4CAF50' : '#FF0000';
+                                console.log(colore)
+                                $('#pallino-' + viaggioId).css('background-color', colore);
+                            }
+                        },
+                        error: function() {
+                            console.log('Errore nella richiesta Ajax');
+                        }
+                    });
+                }
+                function eliminaViaggio(viaggioId) {
+                    var confermaEliminazione = confirm("Sei sicuro di voler eliminare questo viaggio?");
+                    if(confermaEliminazione) {
+                        $.ajax({
+                            url: `/eliminaV/${viaggioId}`,
+                            type: 'POST',
+                            dataType: 'json',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    if (response.fattura_id == -1) {
+                                        $("tr[name='inalca" + viaggioId + "'").hide();
+                                        if(response.viaggio_nome == 'Inalca')
+                                            importo_finale -= response.importo_viaggio;
+                                        $("#importo" + response.cliente_id).text(importo_finale);
+                                    } else {
+                                        $("tr[name='inalca" + viaggioId + "'").hide();
+                                        $("#importo" + response.fattura_id).text(response.importo_f);
+                                        if (response.importo_f == 0) {
+                                            var rigav = $("#tabella-fatture tr").filter(function () {
+                                                return $(this).find("td:contains(" + response.fattura_numero + ")").length > 0;
+                                            });
+                                            var riganv = rigav.next();
+                                            rigav.hide();
+                                            riganv.hide();
+                                        }
+                                    }
+
+
+                                }
+                            },
+                            error: function () {
+                                console.log('Errore nella richiesta Ajax');
+                            }
+                        });
+                    }
+                }
+                function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Trova il cookie con il nome specificato
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+            </script>

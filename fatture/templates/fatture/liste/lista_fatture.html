@@ -1,0 +1,29 @@
+<table id="tabella-fatture" style="margin-top: 30px;">
+    <thead>
+        <tr>
+            <th>Numero</th>
+            <th>Data</th>
+            <th>Importo</th>
+            <th>Tipo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fattura in fatture %}
+        {% if fattura.tipo == 'S' %}
+            <tr>
+                <td>{{ fattura.numero }}</td>
+                <td>{{ fattura.data }}</td>
+                <td>{{ fattura.importo }}</td>
+                <td>{{ fattura.get_tipo_display }}
+
+
+
+                </td>
+                <td><button onclick="location.href='{% url 'modifica' fattura.numero %}'">Modifica</button>
+                <button onclick="location.href='{% url 'elimina' fattura.numero %}'">Elimina</button></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
