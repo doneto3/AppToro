@@ -228,6 +228,14 @@ def eliminaV(request, id):
     return JsonResponse({'success': False})
 
 
+def eliminaC(request, id):
+    cliente = Cliente.objects.get(id=id)
+    if request.method == 'POST':
+        cliente.delete()
+        return redirect('clienti')
+    return render(request, 'fatture/eliminaC.html',{'cliente': cliente})
+
+
 def scegliViaggio(request):
     return render(request, 'fatture/ScegliViaggio.html')
 
