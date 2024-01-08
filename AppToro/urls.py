@@ -37,5 +37,6 @@ urlpatterns = [
     path('eliminaV/<int:id>', views.eliminaV, name="eliminaV"),
     path('aggiornaPagato/<int:id>', views.aggiornaPagato, name="aggiornaPagato"),
     path('scegliViaggio', views.scegliViaggio, name="scegliViaggio"),
-    path('excel/', views.export_data_to_excel, name="excel")
+    path('excel/', views.export_data_to_excel, name="excel"),
+    path('eliminaC/<int:id>', views.eliminaC, name="eliminaC"),
 ]
