@@ -1,0 +1,14 @@
+{% extends 'fatture/index.html' %}
+{% block corpo %}
+    <button onclick="location.href = '{% url 'clienti' %}'" id="indietro">Indietro</button>
+    <section>
+    <h2>Sei sicuro di voler erliminare il seguente cliente?</h2>
+        <h3><b>{{ cliente.nome }}</b></h3>
+
+    <br>
+    <form method="post">
+        {% csrf_token %}
+    <button style="background-color: #ba2121" onclick="location.href = '{% url 'eliminaC' cliente.id %}'" id="eliminaC">Elimina</button>
+    </form>
+    </section>
+{% endblock %}
