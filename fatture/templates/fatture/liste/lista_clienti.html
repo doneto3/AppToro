@@ -12,6 +12,7 @@
                 <td>
                         <button id="mostra-form-viaggio-{{ cliente.id }}">+</button>
                         <button name="{{ cliente.nome }}" id="mostra-table-{{ cliente.id }}">⯆</button>
+                        <button onclick="location.href = '{% url 'eliminaC' cliente.id %}'">🗑️</button>
                 </td>
             </tr>
 
