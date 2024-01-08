@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
+import django_heroku
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +28,7 @@ SECRET_KEY = 'django-insecure-1)^wql##brz+a3ldssa+k_tdamf!m5q(%sp2#@^+1@m-n!fc1p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.67','127.0.0.1','172.20.10.2','https://apptoro-881c415a0624.herokuapp.com/','apptoro-881c415a0624.herokuapp.com']
+ALLOWED_HOSTS = ['192.168.1.67','127.0.0.1','172.20.10.2', 'https://apptoro-881c415a0624.herokuapp.com/']
 
 
 # Application definition
@@ -78,13 +79,15 @@ WSGI_APPLICATION = 'AppToro.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dec9l8p8la7obe',
+        'USER': 'pulwidknohdedj',
+        'PASSWORD': 'd0e42e99fdc5f632e9462645a92c0e1216dc89a0c6ed5297c092411b7722572e',
+        'HOST': 'ec2-34-250-252-161.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
+    }
 }
-
-# Imposta 'ENGINE': 'django.db.backends.sqlite3' solo in ambiente di sviluppo
-if DEBUG:
-    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
-    DATABASES['default']['NAME'] = BASE_DIR / 'db.sqlite3'
 
 
 # Password validation
@@ -121,8 +124,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = 'static/'
-
+django_heroku.settings(locals())
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
